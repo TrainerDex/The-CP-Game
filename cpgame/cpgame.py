@@ -169,9 +169,9 @@ class ScanImage:
     def __crop_percentage(self):
         # Might need adjusting
         return self.__image.crop((
-            self.x * 0.3,
+            self.x * 0.2,
             self.y * 0.02,
-            self.x * 0.7,
+            self.x * 0.8,
             self.y * 0.2
         ))
     
