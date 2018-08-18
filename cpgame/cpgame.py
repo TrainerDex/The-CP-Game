@@ -24,7 +24,8 @@ class CPGame:
     async def check_number(self, ctx):
         channel_config = self.config.channel(channel=ctx.channel)
         if await channel_config.active():
-            await ctx.send(f"The next number is {await channel_config.number()}.")
+            number = await channel_config.number()
+            await ctx.send(f"The next number is {number}.")
         else:
             await ctx.send(f"There is no live game on.")
     
@@ -141,7 +142,8 @@ class CPGame:
                     await channel_config.number.set(need+1)
                     await channel_config.last_trainer_id.set(message.author.id)
                 else:
-                    await ctx.send(f"Well done {message.author.mention}, <@{await channel_config.last_trainer_id()}> and company, you completed The CP Game")
+                    last_trainer = await channel_config.last_trainer_id()
+                    await ctx.send(f"Well done {message.author.mention}, <@{last_trainer}> and company, you completed The CP Game")
                     await channel_config.active.set(False)
                     await channel_config.last_trainer_id.set(message.author.id)
                     await channel_config.number.set(None)
