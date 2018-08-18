@@ -1,4 +1,4 @@
-from redbot.core import commands, Config
+from redbot.core import commands, Config, checks
 import requests
 import pyocr
 import pyocr.builders
@@ -20,6 +20,15 @@ class CPGame:
         #    timeout=None
         #)
     
+    @commands.command(name="number")
+    async def check_number(self, ctx):
+        channel_config = self.config.channel(channel=ctx.channel)
+        if await channel_config.active():
+            await ctx.send(f"The next number is {await channel_config.number()}.")
+        else:
+            await ctx.send(f"There is no live game on.")
+    
+    @checks.mod_or_permissions(manage_channels=True)
     @commands.command(name="start", case_insensitive=True)
     async def start_game(self, ctx, start: int=10):
         """Start the game in this channel from that number. It's highly recommended to use a dedicated channel for this as any other message will be deleted."""
@@ -33,6 +42,7 @@ class CPGame:
         await channel_config.number.set(start)
         await channel_config.last_trainer_id.set(None)
     
+    @checks.mod_or_permissions(manage_channels=True)
     @commands.command(name="pause", case_insensitive=True)
     async def pause_game(self, ctx):
         """Pause the CP Game"""
@@ -50,6 +60,7 @@ class CPGame:
         else:
             await ctx.send("No active game! Nothing to do.")
     
+    @checks.mod_or_permissions(manage_channels=True)
     @commands.command(name="continue", case_insensitive=True)
     async def continue_game(self, ctx):
         """Continute an already started game"""
@@ -62,6 +73,7 @@ class CPGame:
         else:
             await ctx.send("No valid game! Please use the `start` command to create a new game.")
     
+    @checks.mod_or_permissions(manage_channels=True)
     @commands.command(name="end", case_insensitive=True)
     async def end_game(self, ctx):
         """End the existing game"""
@@ -168,9 +180,11 @@ class ScanImage:
             builder=pyocr.builders.TextBuilder()
         )
         
+        restructured_text = text.replace("l", "1").replace("o", "0").replace("I", "1").replace("O", "0")
+        
         print(f"Found: {text}")
-        if re.search('\d{2,4}',text):
-            guess = int(re.search('\d{2,4}',text).group())
+        if re.search('\d{2,4}', restructured_text):
+            guess = int(re.search('\d{2,4}', restructured_text).group())
             print(f"Guess: {guess}")
             return guess
         return None

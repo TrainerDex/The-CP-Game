@@ -1,0 +1,14 @@
+{
+  "author" : ["JayTurnr", "TrainerDex"],
+  "description" : "The CP Game for Pokemon Go communities",
+  "install_msg" : "Please ensure you have tesseract installed.",
+  "short" : "The CP Game for Pokemon Go communities",
+  "bot_version" : [1, 0, 0],
+  "requirements" : [
+    "pyocr",
+    "requests",
+    "Pillow"
+  ],
+  "tags" : ["pokemon go", "cp game", "ocr", "tesseract"],
+  "type" : "COG"
+}
