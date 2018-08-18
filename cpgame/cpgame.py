@@ -11,7 +11,7 @@ class CPGame:
     
     def __init__(self, bot):
         self.bot = bot
-        self.config = Config.get_conf(self, identifier='com.trainerdex.cpgame')
+        self.config = Config.get_conf(self, identifier=541834333405183)
         #self.config.register_channel(
         #    active=False,
         #    start=None,
