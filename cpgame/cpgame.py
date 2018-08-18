@@ -31,6 +31,7 @@ class CPGame:
         await channel_config.active.set(True)
         await channel_config.start.set(start)
         await channel_config.number.set(start)
+        await channel_config.last_trainer_id.set(None)
     
     @commands.command(name="pause", case_insensitive=True)
     async def pause_game(self, ctx):
@@ -110,12 +111,18 @@ class CPGame:
             if message.author.id == await channel_config.last_trainer_id():
                 await message.delete()
                 await ctx.send(f"Deleted a screenshot by {message.author.mention} as the last submission was submitted by them.", delete_after=30)
+                return
             cp = ScanImage(image).cp
+            if cp is None:
+                await message.delete()
+                await ctx.send(f"Deleted a screenshot by {message.author.mention} as the CP couldn't be detected.", delete_after=30)
+                return
             print(cp)
             need = await channel_config.number()
             if cp != need:
                 await message.delete()
                 await ctx.send(f"Deleted screenshot by {message.author.mention} as we're looking for CP{need} not CP{cp}.", delete_after=30)
+                return
             else:
                 await message.add_reaction("👍")
                 if need != 3500:
@@ -149,7 +156,7 @@ class ScanImage:
         # Might need adjusting
         return self.__image.crop((
             self.x * 0.3,
-            self.y * 0.05,
+            self.y * 0.02,
             self.x * 0.7,
             self.y * 0.2
         ))
@@ -162,6 +169,8 @@ class ScanImage:
         )
         
         print(f"Found: {text}")
-        guess = int(re.search('\d{2,4}',text).group())
-        print(f"Guess: {guess}")
-        return guess
+        if re.search('\d{2,4}',text):
+            guess = int(re.search('\d{2,4}',text).group())
+            print(f"Guess: {guess}")
+            return guess
+        return None
