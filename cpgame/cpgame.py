@@ -22,7 +22,7 @@ class CPGame:
     
     @commands.command(name="cpnumber")
     async def check_number(self, ctx):
-        """Check what the next CP number is""
+        """Check what the next CP number is"""
         channel_config = self.config.channel(channel=ctx.channel)
         if await channel_config.active():
             number = await channel_config.number()
