@@ -20,8 +20,9 @@ class CPGame:
         #    timeout=None
         #)
     
-    @commands.command(name="number")
+    @commands.command(name="cpnumber")
     async def check_number(self, ctx):
+        """Check what the next CP number is"""
         channel_config = self.config.channel(channel=ctx.channel)
         if await channel_config.active():
             number = await channel_config.number()
@@ -30,7 +31,7 @@ class CPGame:
             await ctx.send(f"There is no live game on.")
     
     @checks.mod_or_permissions(manage_channels=True)
-    @commands.command(name="start", case_insensitive=True)
+    @commands.command(name="cpstart", case_insensitive=True)
     async def start_game(self, ctx, start: int=10):
         """Start the game in this channel from that number. It's highly recommended to use a dedicated channel for this as any other message will be deleted."""
         if not 10 <= start < 3500:
@@ -44,7 +45,7 @@ class CPGame:
         await channel_config.last_trainer_id.set(None)
     
     @checks.mod_or_permissions(manage_channels=True)
-    @commands.command(name="pause", case_insensitive=True)
+    @commands.command(name="cppause", case_insensitive=True)
     async def pause_game(self, ctx):
         """Pause the CP Game"""
     
@@ -62,7 +63,7 @@ class CPGame:
             await ctx.send("No active game! Nothing to do.")
     
     @checks.mod_or_permissions(manage_channels=True)
-    @commands.command(name="continue", case_insensitive=True)
+    @commands.command(name="cpcontinue", case_insensitive=True)
     async def continue_game(self, ctx):
         """Continute an already started game"""
     
@@ -75,7 +76,7 @@ class CPGame:
             await ctx.send("No valid game! Please use the `start` command to create a new game.")
     
     @checks.mod_or_permissions(manage_channels=True)
-    @commands.command(name="end", case_insensitive=True)
+    @commands.command(name="cpend", case_insensitive=True)
     async def end_game(self, ctx):
         """End the existing game"""
         channel_config = self.config.channel(channel=ctx.channel)
